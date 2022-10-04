@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/PIX/ICON">
+        <file>resource/home.png</file>
+        <file>resource/GEM1.jpg</file>
+        <file>resource/groundMap.png</file>
+        <file>resource/flyMap.png</file>
+        <file>resource/huijia.png</file>
+        <file>resource/jiangliuo.png</file>
+        <file>resource/qifei.png</file>
+        <file>resource/wurenji.png</file>
+        <file>resource/robot.jpg</file>
+    </qresource>
+</RCC>
