@@ -1,0 +1,31 @@
+#ifndef VIDEOBYFFPEG_H
+#define VIDEOBYFFPEG_H
+
+#include <QObject>
+#include <QMainWindow>
+#include <QDebug>
+#include <QImage>
+#include <QThread>
+extern "C"
+{
+    #include <libavcodec/avcodec.h>
+    #include <libavformat/avformat.h>
+    #include <libswscale/swscale.h>
+    #include <libavdevice/avdevice.h>
+    #include <libavformat/version.h>
+    #include <libavutil/time.h>
+    #include <libavutil/mathematics.h>
+}
+
+
+class VideoByFfpeg : public QObject
+{
+    Q_OBJECT
+public:
+    explicit VideoByFfpeg(QObject *parent = nullptr);
+
+signals:
+
+};
+
+#endif // VIDEOBYFFPEG_H

@@ -4,7 +4,6 @@
 #include <qpixmap.h>
 #include <qrect.h>
 #include <qdebug.h>
-#include "myvideowidget.h"
 
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
@@ -12,6 +11,11 @@ MainWidget::MainWidget(QWidget *parent)
 {
     ui->setupUi(this);
     qDebug() << __FILE__ <<__LINE__;
+    //设置视屏播放Label鼠标穿透
+    ui->videoLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
+    //ui->homeButBox->setAttribute(Qt::WA_TransparentForMouseEvents);
+    //隐藏关闭视屏按钮
+    ui->closeVideoBut->hide();
     //设置HOME图标
     ui->homeButBox->hide();
     QPixmap pix;
@@ -62,6 +66,43 @@ MainWidget::MainWidget(QWidget *parent)
 
     //点击连接机器人按钮，进行机器人连接
     connect(ui->connectRobotBut, &QPushButton::clicked, this, &MainWidget::SetMainWidget);
+
+    //点击视屏播放按钮，实现视屏播放
+    connect(ui->videoBut, &QPushButton::clicked, this, [=](){
+        ui->videoBut->setEnabled(false);
+        ui->closeVideoBut->show();
+        ui->videoLabel->show();
+
+        //此处后续应该加上从参数设置文件中读取视屏地址
+        videoThread = new QThread;
+        videoJob = new VideoByFfmpeg("rtsp://192.168.144.25:8554/main.264",AV_PIX_FMT_RGBA);
+        videoJob->moveToThread(videoThread);
+        connect(this, &MainWidget::StartPlay, videoJob, &VideoByFfmpeg::Working);
+        connect(videoJob, &VideoByFfmpeg::GetOneFrame, this, &MainWidget::PlayVideo,Qt::QueuedConnection);
+
+        if(videoJob->InitFfmpeg())
+        {
+            emit StartPlay();
+            videoThread->start();
+            qDebug() << "视屏线程开始工作";
+        }
+    });
+
+    //点击视屏关闭按钮，关闭视屏
+    connect(ui->closeVideoBut, &QPushButton::clicked, this, [=](){
+        qDebug() << "开始关闭视屏";
+        ui->closeVideoBut->hide();
+        ui->videoBut->setEnabled(true);
+        ui->videoLabel->hide();
+
+        videoJob->StopVideo();
+        videoThread->quit();
+        videoThread->wait();
+        videoThread->deleteLater();
+
+        videoJob->deleteLater();
+        qDebug() << "关闭视屏成功";
+    });
 }
 
 void MainWidget::ApplySetting()
@@ -109,6 +150,7 @@ void MainWidget::SetMainWidget()
     ui->groundInformation->show();
     ui->offRoadModeBut->setEnabled(true);
     ui->flyModeBut->setEnabled(true);
+    ui->videoBut->setEnabled(true);
 
     //点击飞行某所按钮，切换到飞行模式
     connect(ui->flyModeBut,&QPushButton::clicked,this,[=](){
@@ -137,6 +179,13 @@ void MainWidget::SetMainWidget()
         ui->flyModeFunBox->hide();
         ui->flyModeBut->setEnabled(true);
     });
+}
+
+void MainWidget::PlayVideo(QImage image)
+{
+    QImage videoImage = image.scaled(ui->videoLabel->width(), ui->videoLabel->height());
+    ui->videoLabel->setScaledContents(true);
+    ui->videoLabel->setPixmap(QPixmap::fromImage(videoImage));
 }
 
 MainWidget::~MainWidget()

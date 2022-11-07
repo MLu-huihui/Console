@@ -652,24 +652,48 @@
     </property>
    </widget>
   </widget>
-  <widget class="MyVideoWidget" name="widget" native="true">
+  <widget class="QLabel" name="videoLabel">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>220</y>
-     <width>350</width>
-     <height>220</height>
+     <x>100</x>
+     <y>40</y>
+     <width>660</width>
+     <height>450</height>
     </rect>
    </property>
-   <property name="minimumSize">
-    <size>
-     <width>350</width>
-     <height>220</height>
-    </size>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="closeVideoBut">
+   <property name="geometry">
+    <rect>
+     <x>725</x>
+     <y>40</y>
+     <width>35</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    font-size: 40px;
+    color: rgb(71, 62, 62);
+	padding-top:-5px;
+
+}
+QPushButton:hover {
+background-color: rgb(255, 0, 0);
+}
+</string>
+   </property>
+   <property name="text">
+    <string>×</string>
    </property>
   </widget>
   <zorder>flyModeFunBox</zorder>
-  <zorder>homeButBox</zorder>
   <zorder>home_Button</zorder>
   <zorder>switchPixLabel</zorder>
   <zorder>choseWidget</zorder>
@@ -677,16 +701,10 @@
   <zorder>connectRobotBut</zorder>
   <zorder>groundInformation</zorder>
   <zorder>flyInformation</zorder>
-  <zorder>widget</zorder>
+  <zorder>videoLabel</zorder>
+  <zorder>homeButBox</zorder>
+  <zorder>closeVideoBut</zorder>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>MyVideoWidget</class>
-   <extends>QWidget</extends>
-   <header>myvideowidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

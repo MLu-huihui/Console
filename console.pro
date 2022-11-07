@@ -19,12 +19,14 @@ SOURCES += \
     main.cpp \
     mainwidget.cpp \
     myvideowidget.cpp \
-    settingwidget.cpp
+    settingwidget.cpp \
+    videobyffmpeg.cpp
 
 HEADERS += \
     mainwidget.h \
     myvideowidget.h \
-    settingwidget.h
+    settingwidget.h \
+    videobyffmpeg.h
 
 FORMS += \
     mainwidget.ui \
@@ -33,3 +35,6 @@ FORMS += \
 
 RESOURCES += \
     rcs.qrc
+
+LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswresample -lswscale -lz
+
