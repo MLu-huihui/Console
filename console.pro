@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    joystickthread.cpp \
     main.cpp \
     mainwidget.cpp \
     myvideowidget.cpp \
@@ -23,7 +24,9 @@ SOURCES += \
     videobyffmpeg.cpp
 
 HEADERS += \
+    joystickthread.h \
     mainwidget.h \
+    mystruct.h \
     myvideowidget.h \
     settingwidget.h \
     videobyffmpeg.h

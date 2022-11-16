@@ -179,6 +179,20 @@ void MainWidget::SetMainWidget()
         ui->flyModeFunBox->hide();
         ui->flyModeBut->setEnabled(true);
     });
+
+    //实现Joystick线程的工作
+    joystickThread = new QThread;
+    joystickJob = new JoystickThread;
+    joystickJob->moveToThread(joystickThread);
+    connect(this, &MainWidget::StartJS, joystickJob, &JoystickThread::Working);
+    connect(joystickJob, &JoystickThread::GetJSValue, this, &MainWidget::SentCtrlInfo, Qt::QueuedConnection);
+    qDebug()<<"准备初始化Joystick";
+    if(joystickJob->JoystickInit())
+    {
+        emit StartJS();
+        joystickThread->start();
+        qDebug() << "开始接受JS数据";
+    }
 }
 
 void MainWidget::PlayVideo(QImage image)
@@ -188,8 +202,24 @@ void MainWidget::PlayVideo(QImage image)
     ui->videoLabel->setPixmap(QPixmap::fromImage(videoImage));
 }
 
+void MainWidget::SentCtrlInfo(JoyStickVal js)
+{
+    ui->LXValue->setText(QString::number(js.leftX));
+    ui->LYValue->setText(QString::number(js.leftY));
+    ui->RXValue->setText(QString::number(js.rightX));
+    ui->RYValue->setText(QString::number(js.rightY));
+    ui->LS1Value->setText(QString::number(js.switchL1));
+    ui->LS2Value->setText(QString::number(js.switchL2));
+    ui->RSValue->setText(QString::number(js.switchR));
+}
+
 MainWidget::~MainWidget()
 {
+    joystickThread->quit();
+    joystickThread->wait();
+    joystickThread->deleteLater();
+    qDebug()<<"退出JS线程";
+    joystickJob->deleteLater();
     delete ui;
 }
 

@@ -7,6 +7,8 @@
 #include <qthread.h>
 #include "videobyffmpeg.h"
 #include "myvideowidget.h"
+#include "joystickthread.h"
+#include <qstring.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWidget; }
@@ -24,8 +26,11 @@ public:
     //声明一个参数设置界面
     SettingWidget *setting_Widget;
     //声明视频线程
-    QThread *videoThread = nullptr;
+    QThread* videoThread = nullptr;
     VideoByFfmpeg *videoJob = nullptr;
+    //声明joystick线程
+    QThread* joystickThread = nullptr;
+    JoystickThread *joystickJob = nullptr;
 
 public slots:
     void ApplySetting();
@@ -34,9 +39,13 @@ public slots:
     void SetMainWidget();
     //接受到解析后的视屏进行播放
     void PlayVideo(QImage image);
+    //接受JS信号后进行处理
+    void SentCtrlInfo(JoyStickVal js);
 signals:
     //点击视屏播放按钮后，发出播放视屏信号
     void StartPlay();
+    //开始接受joystick信号
+    void StartJS();
 
 private:
     Ui::MainWidget *ui;

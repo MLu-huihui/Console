@@ -181,7 +181,7 @@ bool VideoByFfmpeg::InitFfmpeg()
         }
         qDebug() << "开始修改pix_fmt";
         pAVCodecContext->pix_fmt = pixFormat;
-      }
+    }
     qDebug() <<"运行sws_getContext";
     pSwsContext = sws_getContext(pAVCodecContext->width,pAVCodecContext->height,pAVCodecContext->pix_fmt,//转换前的长、宽、像素格式
                                  pAVCodecContext->width,pAVCodecContext->height,mpix_fmt,//转换后的长、宽、像素格式
