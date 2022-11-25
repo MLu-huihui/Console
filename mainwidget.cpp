@@ -64,6 +64,8 @@ MainWidget::MainWidget(QWidget *parent)
         ui->connectRobotBut->setEnabled(true);
     });
 
+    videoJob = nullptr;
+    joystickJob = nullptr;
     //点击连接机器人按钮，进行机器人连接
     connect(ui->connectRobotBut, &QPushButton::clicked, this, &MainWidget::SetMainWidget);
 
@@ -102,6 +104,7 @@ MainWidget::MainWidget(QWidget *parent)
 
         videoJob->deleteLater();
         qDebug() << "关闭视屏成功";
+        videoJob = nullptr;
     });
 }
 
@@ -215,11 +218,24 @@ void MainWidget::SentCtrlInfo(JoyStickVal js)
 
 MainWidget::~MainWidget()
 {
-    joystickThread->quit();
-    joystickThread->wait();
-    joystickThread->deleteLater();
-    qDebug()<<"退出JS线程";
-    joystickJob->deleteLater();
+    if(videoJob)
+    {
+        videoJob->StopVideo();
+        videoThread->quit();
+        videoThread->wait();
+        videoThread->deleteLater();
+        qDebug()<<"退出视屏播放线程";
+        videoJob->deleteLater();
+    }
+    if(joystickJob)
+    {
+        joystickJob->StopJS();
+        joystickThread->quit();
+        joystickThread->wait();
+        joystickThread->deleteLater();
+        qDebug()<<"退出JS线程";
+        joystickJob->deleteLater();
+    }
     delete ui;
 }
 

@@ -1,4 +1,4 @@
-QT       += core gui multimedia multimediawidgets
+QT       += core gui multimedia multimediawidgets serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,6 +24,16 @@ SOURCES += \
     videobyffmpeg.cpp
 
 HEADERS += \
+    consoletest/checksum.h \
+    consoletest/consoletest/consoletest.h \
+    consoletest/consoletest/mavlink.h \
+    consoletest/consoletest/mavlink_msg_js_crtl_info.h \
+    consoletest/consoletest/testsuite.h \
+    consoletest/consoletest/version.h \
+    consoletest/mavlink_conversions.h \
+    consoletest/mavlink_helpers.h \
+    consoletest/mavlink_types.h \
+    consoletest/protocol.h \
     joystickthread.h \
     mainwidget.h \
     mystruct.h \
