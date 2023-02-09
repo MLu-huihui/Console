@@ -13,7 +13,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <qthread.h>
-#include "consoletest/consoletest/mavlink.h"
+#include "gcsmavlink/gcsmavlink/mavlink.h"
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QMutex>
@@ -65,6 +65,7 @@ private:
     bool isCanRun;
 
 signals:
+    //信号槽传递接收到的遥控器信号
     void GetJSValue(JoyStickVal js);
 
 };

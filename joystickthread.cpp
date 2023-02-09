@@ -148,28 +148,28 @@ void JoystickThread::Working()
         serialPort->write(sendBuf);
         //qDebug()<<"buf:"<<sendBuf.toHex();
         //尝试进行解析
-        mavlink_status_t status;
-        mavlink_message_t rmsg;
-        uint8_t chan = MAVLINK_COMM_0;
-        uint8_t *getbuf = (unsigned char *)sendBuf.data();
-        for (int i = 0; i <len; i++)
-        {
-            if (mavlink_parse_char(chan, getbuf[i], &rmsg, &status) == 1)
-            {
-                switch (rmsg.msgid)
-                {
-                case MAVLINK_MSG_ID_JS_CRTL_INFO:
-                    mavlink_js_crtl_info_t heartbeat;
-                    mavlink_msg_js_crtl_info_decode(&rmsg, &heartbeat);
-                    qDebug()<<"leftX:"<<heartbeat.leftX<<". leftY:"<<heartbeat.leftY<<"rightX:"<<heartbeat.rightX<<". rightY:"<<heartbeat.rightY<<". mode:"<<heartbeat.mode;
-                    break;
-                default:
-                    break;
-                }
-            }
-        }
+//        mavlink_status_t status;
+//        mavlink_message_t rmsg;
+//        uint8_t chan = MAVLINK_COMM_0;
+//        uint8_t *getbuf = (unsigned char *)sendBuf.data();
+//        for (int i = 0; i <len; i++)
+//        {
+//            if (mavlink_parse_char(chan, getbuf[i], &rmsg, &status) == 1)
+//            {
+//                switch (rmsg.msgid)
+//                {
+//                case MAVLINK_MSG_ID_JS_CRTL_INFO:
+//                    mavlink_js_crtl_info_t heartbeat;
+//                    mavlink_msg_js_crtl_info_decode(&rmsg, &heartbeat);
+//                    qDebug()<<"leftX:"<<heartbeat.leftX<<". leftY:"<<heartbeat.leftY<<"rightX:"<<heartbeat.rightX<<". rightY:"<<heartbeat.rightY<<". mode:"<<heartbeat.mode;
+//                    break;
+//                default:
+//                    break;
+//                }
+//            }
+//        }
 
-        delete[] buf;
+//        delete[] buf;
         emit GetJSValue(*js_val);
     }
 }

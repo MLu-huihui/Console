@@ -24,16 +24,19 @@ SOURCES += \
     videobyffmpeg.cpp
 
 HEADERS += \
-    consoletest/checksum.h \
-    consoletest/consoletest/consoletest.h \
-    consoletest/consoletest/mavlink.h \
-    consoletest/consoletest/mavlink_msg_js_crtl_info.h \
-    consoletest/consoletest/testsuite.h \
-    consoletest/consoletest/version.h \
-    consoletest/mavlink_conversions.h \
-    consoletest/mavlink_helpers.h \
-    consoletest/mavlink_types.h \
-    consoletest/protocol.h \
+    gcsmavlink/checksum.h \
+    gcsmavlink/gcsmavlink/gcsmavlink.h \
+    gcsmavlink/gcsmavlink/mavlink.h \
+    gcsmavlink/gcsmavlink/mavlink_msg_air_point_info.h \
+    gcsmavlink/gcsmavlink/mavlink_msg_fly_quick_ctrl.h \
+    gcsmavlink/gcsmavlink/mavlink_msg_js_crtl_info.h \
+    gcsmavlink/gcsmavlink/mavlink_msg_robot_posture_info.h \
+    gcsmavlink/gcsmavlink/testsuite.h \
+    gcsmavlink/gcsmavlink/version.h \
+    gcsmavlink/mavlink_conversions.h \
+    gcsmavlink/mavlink_helpers.h \
+    gcsmavlink/mavlink_types.h \
+    gcsmavlink/protocol.h \
     joystickthread.h \
     mainwidget.h \
     mystruct.h \

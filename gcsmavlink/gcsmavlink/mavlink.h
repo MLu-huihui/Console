@@ -1,12 +1,12 @@
 /** @file
- *  @brief MAVLink comm protocol built from consoletest.xml
+ *  @brief MAVLink comm protocol built from gcsmavlink.xml
  *  @see http://mavlink.org
  */
 #pragma once
 #ifndef MAVLINK_H
 #define MAVLINK_H
 
-#define MAVLINK_PRIMARY_XML_HASH -888574189697642923
+#define MAVLINK_PRIMARY_XML_HASH 4138305264125439057
 
 #ifndef MAVLINK_STX
 #define MAVLINK_STX 254
@@ -29,6 +29,6 @@
 #endif
 
 #include "version.h"
-#include "consoletest.h"
+#include "gcsmavlink.h"
 
 #endif // MAVLINK_H
