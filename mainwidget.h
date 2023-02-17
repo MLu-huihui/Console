@@ -8,7 +8,10 @@
 #include "videobyffmpeg.h"
 #include "myvideowidget.h"
 #include "joystickthread.h"
+#include "postureinfodecode.h"
 #include <qstring.h>
+#include <qserialport.h>
+#include "gcsmavlink/gcsmavlink/mavlink.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWidget; }
@@ -31,6 +34,12 @@ public:
     //声明joystick线程
     QThread* joystickThread = nullptr;
     JoystickThread *joystickJob = nullptr;
+    //声明机器人姿态信号接收、解析线程
+    QThread* postureThread = nullptr;
+    PostureInfoDecode* postureJOb = nullptr;
+
+    //控制台与地面端通讯串口声明
+    QSerialPort *serialPort;
 
 public slots:
     void ApplySetting();
@@ -41,11 +50,16 @@ public slots:
     void PlayVideo(QImage image);
     //接受JS信号后进行处理
     void SentCtrlInfo(JoyStickVal js);
+    //接收并解析姿态信息后在仪表盘上显示
+    void PanelUpdate(mavlink_robot_posture_info_t* info);
+
 signals:
     //点击视屏播放按钮后，发出播放视屏信号
     void StartPlay();
     //开始接受joystick信号
     void StartJS();
+    //开始接收并解析posture信号
+    void StartPoseture();
 
 private:
     Ui::MainWidget *ui;

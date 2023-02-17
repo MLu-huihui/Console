@@ -1,8 +1,8 @@
 #include "joystickthread.h"
 
-JoystickThread::JoystickThread(QObject *parent) : QObject(parent)
+JoystickThread::JoystickThread(QSerialPort *serialPort, QObject *parent) : QObject(parent)
 {
-
+    openedPort = serialPort;
 }
 
 JoystickThread::~JoystickThread()
@@ -11,11 +11,8 @@ JoystickThread::~JoystickThread()
     {
         close(js_fd);
     }
-    if(serialPort->isOpen())
-    {
-        serialPort->clear();
-        serialPort->close();
-    }
+    free(js_val);
+    js_val = nullptr;
 }
 
 bool JoystickThread::JoystickInit()
@@ -32,29 +29,29 @@ bool JoystickThread::JoystickInit()
     }
     qDebug() << "打开JS设备文件成功";
 
-    //查询可用串口
-    QList<QSerialPortInfo> serialPortInfo = QSerialPortInfo::availablePorts();
-    foreach (const QSerialPortInfo &info, serialPortInfo) {
-        qDebug()<<"serialPortName:"<<info.portName();
-    }
-    //打开串口并设置
-    serialPort = new QSerialPort();
-    serialPort->setPortName(serialPortInfo[0].portName());
-    if(serialPort->isOpen())
-    {
-        serialPort->clear();
-        serialPort->close();
-    }
-    if(!serialPort->open(QIODevice::ReadWrite))
-    {
-        qDebug()<<serialPort->portName()<<"打开失败";
-        return false;
-    }
-    serialPort->setBaudRate(QSerialPort::Baud115200,QSerialPort::AllDirections);//设置波特率和读写方向
-    serialPort->setDataBits(QSerialPort::Data8);		//数据位为8位
-    serialPort->setFlowControl(QSerialPort::NoFlowControl);//无流控制
-    serialPort->setParity(QSerialPort::NoParity);	//无校验位
-    serialPort->setStopBits(QSerialPort::OneStop); //一位停止位
+//    //查询可用串口
+//    QList<QSerialPortInfo> serialPortInfo = QSerialPortInfo::availablePorts();
+//    foreach (const QSerialPortInfo &info, serialPortInfo) {
+//        qDebug()<<"serialPortName:"<<info.portName();
+//    }
+//    //打开串口并设置
+//    serialPort = new QSerialPort();
+//    serialPort->setPortName(serialPortInfo[0].portName());
+//    if(serialPort->isOpen())
+//    {
+//        serialPort->clear();
+//        serialPort->close();
+//    }
+//    if(!serialPort->open(QIODevice::ReadWrite))
+//    {
+//        qDebug()<<serialPort->portName()<<"打开失败";
+//        return false;
+//    }
+//    serialPort->setBaudRate(QSerialPort::Baud115200,QSerialPort::AllDirections);//设置波特率和读写方向
+//    serialPort->setDataBits(QSerialPort::Data8);		//数据位为8位
+//    serialPort->setFlowControl(QSerialPort::NoFlowControl);//无流控制
+//    serialPort->setParity(QSerialPort::NoParity);	//无校验位
+//    serialPort->setStopBits(QSerialPort::OneStop); //一位停止位
 
     return true;
 }
@@ -145,7 +142,8 @@ void JoystickThread::Working()
         uint8_t* buf = new uint8_t[len];
         len = mavlink_msg_to_send_buffer(buf, &msg);
         QByteArray sendBuf = QByteArray::fromRawData((char *)buf, len);;
-        serialPort->write(sendBuf);
+        openedPort->write(sendBuf);
+        //qDebug()<<sentlen;
         //qDebug()<<"buf:"<<sendBuf.toHex();
         //尝试进行解析
 //        mavlink_status_t status;

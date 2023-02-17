@@ -118,83 +118,120 @@ void MainWidget::ApplySetting()
 //连接设备后界面设置槽函数
 void MainWidget::SetMainWidget()
 {
-    QPixmap pix;
-    //绘制地面模式仪表盘并且隐藏
-    pix.load(":/PIX/ICON/resource/groundMap.png");
-    QPixmap groundPix = pix.scaled(ui->groundMap->size(),Qt::KeepAspectRatio);
-    ui->groundMap->setPixmap(groundPix);
-    ui->groundInformation->hide();
-
-    //绘制飞行仪表盘并且隐藏
-    pix.load(":/PIX/ICON/resource/flyMap.png");
-    QPixmap flyPix = pix.scaled(ui->flyMap->size(),Qt::KeepAspectRatio);
-    ui->flyMap->setPixmap(flyPix);
-    ui->flyInformation->hide();
-    //绘制一键操作按键并且隐藏
-    pix.load(":/PIX/ICON/resource/huijia.png");
-    ui->fly_Home->setIcon(QIcon(pix));
-    ui->fly_Home->setIconSize(pix.size());
-    pix.load(":/PIX/ICON/resource/qifei.png");
-    ui->fly_qifei->setIcon(QIcon(pix));
-    ui->fly_qifei->setIconSize(pix.size());
-    pix.load(":/PIX/ICON/resource/jiangliuo.png");
-    ui->fly_jiangluo->setIcon(QIcon(pix));
-    ui->fly_jiangluo->setIconSize(pix.size());
-    pix.load(":/PIX/ICON/resource/wurenji.png");
-    ui->fly_xuanting->setIcon(QIcon(pix));
-    ui->fly_xuanting->setIconSize(pix.size());
-    ui->flyModeFunBox->hide();
-
-    //删除搜索与连接设备的控件
-    delete ui->searchRobotBut;
-    delete ui->connectRobotBut;
-    delete ui->choseWidget;
-    delete ui->switchPixLabel;
-    ui->groundInformation->show();
-    ui->offRoadModeBut->setEnabled(true);
-    ui->flyModeBut->setEnabled(true);
-    ui->videoBut->setEnabled(true);
-
-    //点击飞行某所按钮，切换到飞行模式
-    connect(ui->flyModeBut,&QPushButton::clicked,this,[=](){
-        ui->groundInformation->hide();
-        ui->groundModeBut->setEnabled(true);
-        ui->offRoadModeBut->setEnabled(true);
-        ui->flyInformation->show();
-        ui->flyModeFunBox->show();
-        ui->flyModeBut->setEnabled(false);
-
-    });
-    //切换到平地模式与越野模式
-    connect(ui->groundModeBut,&QPushButton::clicked,this,[=](){
-        ui->groundInformation->show();
-        ui->groundModeBut->setEnabled(false);
-        ui->offRoadModeBut->setEnabled(true);
-        ui->flyInformation->hide();
-        ui->flyModeFunBox->hide();
-        ui->flyModeBut->setEnabled(true);
-    });
-    connect(ui->offRoadModeBut,&QPushButton::clicked,this,[=](){
-        ui->groundInformation->show();
-        ui->groundModeBut->setEnabled(true);
-        ui->offRoadModeBut->setEnabled(false);
-        ui->flyInformation->hide();
-        ui->flyModeFunBox->hide();
-        ui->flyModeBut->setEnabled(true);
-    });
-
-    //实现Joystick线程的工作
-    joystickThread = new QThread;
-    joystickJob = new JoystickThread;
-    joystickJob->moveToThread(joystickThread);
-    connect(this, &MainWidget::StartJS, joystickJob, &JoystickThread::Working);
-    connect(joystickJob, &JoystickThread::GetJSValue, this, &MainWidget::SentCtrlInfo, Qt::QueuedConnection);
-    qDebug()<<"准备初始化Joystick";
-    if(joystickJob->JoystickInit())
+    //打开与地面端通讯的串口
+    //查询可用串口
+    QList<QSerialPortInfo> serialPortInfo = QSerialPortInfo::availablePorts();
+    foreach (const QSerialPortInfo &info, serialPortInfo) {
+        qDebug()<<"serialPortName:"<<info.portName();
+    }
+    //打开串口并设置
+    serialPort = new QSerialPort();
+    serialPort->setPortName(serialPortInfo[0].portName());
+    if(serialPort->isOpen())
     {
-        emit StartJS();
-        joystickThread->start();
-        qDebug() << "开始接受JS数据";
+        serialPort->clear();
+        serialPort->close();
+    }
+    if(!serialPort->open(QIODevice::ReadWrite))
+    {
+        qDebug()<<serialPort->portName()<<"打开失败";
+    }
+    else{
+        serialPort->setBaudRate(QSerialPort::Baud115200,QSerialPort::AllDirections);//设置波特率和读写方向
+        serialPort->setDataBits(QSerialPort::Data8);		//数据位为8位
+        serialPort->setFlowControl(QSerialPort::NoFlowControl);//无流控制
+        serialPort->setParity(QSerialPort::NoParity);	//无校验位
+        serialPort->setStopBits(QSerialPort::OneStop); //一位停止位
+
+        QPixmap pix;
+        //绘制地面模式仪表盘并且隐藏
+        pix.load(":/PIX/ICON/resource/groundMap.png");
+        QPixmap groundPix = pix.scaled(ui->groundMap->size(),Qt::KeepAspectRatio);
+        ui->groundMap->setPixmap(groundPix);
+        ui->groundInformation->hide();
+
+        //绘制飞行仪表盘并且隐藏
+        //        pix.load(":/PIX/ICON/resource/flyMap.png");
+        //        QPixmap flyPix = pix.scaled(ui->flyMap->size(),Qt::KeepAspectRatio);
+        //        ui->flyMap->setPixmap(flyPix);
+        //        ui->flyInformation->hide();
+        //绘制一键操作按键并且隐藏
+        pix.load(":/PIX/ICON/resource/huijia.png");
+        ui->fly_Home->setIcon(QIcon(pix));
+        ui->fly_Home->setIconSize(pix.size());
+        pix.load(":/PIX/ICON/resource/qifei.png");
+        ui->fly_qifei->setIcon(QIcon(pix));
+        ui->fly_qifei->setIconSize(pix.size());
+        pix.load(":/PIX/ICON/resource/jiangliuo.png");
+        ui->fly_jiangluo->setIcon(QIcon(pix));
+        ui->fly_jiangluo->setIconSize(pix.size());
+        pix.load(":/PIX/ICON/resource/wurenji.png");
+        ui->fly_xuanting->setIcon(QIcon(pix));
+        ui->fly_xuanting->setIconSize(pix.size());
+        ui->flyModeFunBox->hide();
+
+        //删除搜索与连接设备的控件
+        delete ui->searchRobotBut;
+        delete ui->connectRobotBut;
+        delete ui->choseWidget;
+        delete ui->switchPixLabel;
+        ui->groundInformation->show();
+        ui->offRoadModeBut->setEnabled(true);
+        ui->flyModeBut->setEnabled(true);
+        ui->videoBut->setEnabled(true);
+
+        //点击飞行某所按钮，切换到飞行模式
+        connect(ui->flyModeBut,&QPushButton::clicked,this,[=](){
+            ui->groundInformation->hide();
+            ui->groundModeBut->setEnabled(true);
+            ui->offRoadModeBut->setEnabled(true);
+            ui->flyInformation->show();
+            ui->flyModeFunBox->show();
+            ui->flyModeBut->setEnabled(false);
+
+        });
+        //切换到平地模式与越野模式
+        connect(ui->groundModeBut,&QPushButton::clicked,this,[=](){
+            ui->groundInformation->show();
+            ui->groundModeBut->setEnabled(false);
+            ui->offRoadModeBut->setEnabled(true);
+            ui->flyInformation->hide();
+            ui->flyModeFunBox->hide();
+            ui->flyModeBut->setEnabled(true);
+        });
+        connect(ui->offRoadModeBut,&QPushButton::clicked,this,[=](){
+            ui->groundInformation->show();
+            ui->groundModeBut->setEnabled(true);
+            ui->offRoadModeBut->setEnabled(false);
+            ui->flyInformation->hide();
+            ui->flyModeFunBox->hide();
+            ui->flyModeBut->setEnabled(true);
+        });
+
+        //实现Joystick线程的工作
+        joystickThread = new QThread;
+        joystickJob = new JoystickThread(serialPort);
+        joystickJob->moveToThread(joystickThread);
+        connect(this, &MainWidget::StartJS, joystickJob, &JoystickThread::Working);
+        connect(joystickJob, &JoystickThread::GetJSValue, this, &MainWidget::SentCtrlInfo, Qt::QueuedConnection);
+        qDebug()<<"准备初始化Joystick";
+        if(joystickJob->JoystickInit())
+        {
+            emit StartJS();
+            joystickThread->start();
+            qDebug() << "开始接受JS数据";
+        }
+        //实现PostureInfoDecode线程的工作
+        postureThread = new QThread;
+        postureJOb = new PostureInfoDecode(serialPort);
+        postureJOb->moveToThread(postureThread);
+        connect(this, &MainWidget::StartPoseture, postureJOb, &PostureInfoDecode::Working);
+        connect(postureJOb, &PostureInfoDecode::GetPostureInfo, this, &MainWidget::PanelUpdate, Qt::QueuedConnection);
+        qDebug()<<"准备接收并解析posture";
+        emit StartPoseture();
+        postureThread->start();
+        qDebug() << "开始接受并解析posture";
+
     }
 }
 
@@ -216,6 +253,15 @@ void MainWidget::SentCtrlInfo(JoyStickVal js)
     ui->RSValue->setText(QString::number(js.switchR));
 }
 
+void MainWidget::PanelUpdate(mavlink_robot_posture_info_t *info)
+{
+    ui->posturePanel->setRoll(info->roll);
+    ui->posturePanel->setPitch(info->pitch);
+    ui->posturePanel->setAltitude(info->altitude);
+    ui->posturePanel->setAirspeed(info->velocity);
+    ui->posturePanel->update();
+}
+
 MainWidget::~MainWidget()
 {
     if(videoJob)
@@ -235,6 +281,11 @@ MainWidget::~MainWidget()
         joystickThread->deleteLater();
         qDebug()<<"退出JS线程";
         joystickJob->deleteLater();
+    }
+    if(serialPort->isOpen())
+    {
+        serialPort->close();
+        qDebug()<<"关闭通讯串口";
     }
     delete ui;
 }

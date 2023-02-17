@@ -248,7 +248,7 @@
   <widget class="QGroupBox" name="groundInformation">
    <property name="geometry">
     <rect>
-     <x>780</x>
+     <x>770</x>
      <y>20</y>
      <width>236</width>
      <height>410</height>
@@ -355,7 +355,7 @@
   <widget class="QGroupBox" name="flyInformation">
    <property name="geometry">
     <rect>
-     <x>780</x>
+     <x>770</x>
      <y>20</y>
      <width>236</width>
      <height>520</height>
@@ -364,19 +364,6 @@
    <property name="title">
     <string>参数信息</string>
    </property>
-   <widget class="QLabel" name="flyMap">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>40</y>
-      <width>200</width>
-      <height>210</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QLabel" name="vxLabel_fly">
     <property name="geometry">
      <rect>
@@ -500,6 +487,16 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="WidgetPFD" name="posturePanel" native="true">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>201</width>
+      <height>201</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -901,6 +898,14 @@ background-color: rgb(255, 0, 0);
   <zorder>closeVideoBut</zorder>
   <zorder>jsTestBox</zorder>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>WidgetPFD</class>
+   <extends>QWidget</extends>
+   <header>WidgetPFD.hpp</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

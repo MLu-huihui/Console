@@ -38,7 +38,7 @@ class JoystickThread : public QObject
 {
     Q_OBJECT
 public:
-    explicit JoystickThread(QObject *parent = nullptr);
+    explicit JoystickThread(QSerialPort *serialPort, QObject *parent = nullptr);
     ~JoystickThread();
 
     //joystick初始化函数
@@ -52,11 +52,12 @@ public:
 
 private:
     JoyStickVal* js_val;
-    //文件描述符
+    //手柄文件描述符
     int js_fd;
 
     //串口声明
-    QSerialPort *serialPort;
+    QSerialPort *openedPort;
+
     //mavlink消息包
     mavlink_message_t msg;
 

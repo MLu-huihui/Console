@@ -1,4 +1,4 @@
-QT       += core gui multimedia multimediawidgets serialport
+QT       += core gui svg multimedia multimediawidgets serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,14 +16,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    LayoutSquare.cpp \
+    Pfd.cpp \
+    WidgetPFD.cpp \
     joystickthread.cpp \
     main.cpp \
     mainwidget.cpp \
     myvideowidget.cpp \
+    postureinfodecode.cpp \
     settingwidget.cpp \
     videobyffmpeg.cpp
 
 HEADERS += \
+    LayoutSquare.hpp \
+    Pfd.hpp \
+    WidgetPFD.hpp \
     gcsmavlink/checksum.h \
     gcsmavlink/gcsmavlink/gcsmavlink.h \
     gcsmavlink/gcsmavlink/mavlink.h \
@@ -41,15 +48,18 @@ HEADERS += \
     mainwidget.h \
     mystruct.h \
     myvideowidget.h \
+    postureinfodecode.h \
     settingwidget.h \
     videobyffmpeg.h
 
 FORMS += \
+    WidgetPFD.ui \
     mainwidget.ui \
     settingwidget.ui
 
 
 RESOURCES += \
+    qfi.qrc \
     rcs.qrc
 
 LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswresample -lswscale -lz
