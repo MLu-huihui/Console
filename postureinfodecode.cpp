@@ -20,6 +20,7 @@ void PostureInfoDecode::Working()
     mavlink_status_t status;
     while(1)
     {
+//        qDebug()<<"开始接收姿态信息";
         int len = openedPort->readLine((char*)getBuf, 41);
         //uint8_t* changeBuf = (unsigned char*)getBuf;
         if(len < 0)
@@ -29,7 +30,7 @@ void PostureInfoDecode::Working()
         }
         for(int i =0; i < len; i++)
         {
-            if(mavlink_parse_char(chan, getBuf[i],&rmsg, &status) == 1)
+            if(mavlink_parse_char(chan, (uint8_t)getBuf[i],&rmsg, &status) == 1)
             {
                 switch (rmsg.msgid)
                 {

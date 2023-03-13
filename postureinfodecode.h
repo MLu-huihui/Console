@@ -5,6 +5,7 @@
 #include <qserialport.h>
 #include "gcsmavlink/gcsmavlink/mavlink.h"
 #include <unistd.h>
+#include <qdebug.h>
 
 class PostureInfoDecode : public QObject
 {

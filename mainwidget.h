@@ -12,6 +12,9 @@
 #include <qstring.h>
 #include <qserialport.h>
 #include "gcsmavlink/gcsmavlink/mavlink.h"
+#include <QtWebEngineWidgets/QWebEngineView>
+#include "bridgetojs.h"
+#include <QWebChannel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWidget; }
@@ -38,6 +41,10 @@ public:
     QThread* postureThread = nullptr;
     PostureInfoDecode* postureJOb = nullptr;
 
+    QWebEngineView *map;
+    QWebChannel *channel;
+    BridgeToJs *myBridgeToJs;
+
     //控制台与地面端通讯串口声明
     QSerialPort *serialPort;
 
@@ -63,5 +70,6 @@ signals:
 
 private:
     Ui::MainWidget *ui;
+
 };
 #endif // MAINWIDGET_H

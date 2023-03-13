@@ -1,4 +1,4 @@
-QT       += core gui svg multimedia multimediawidgets serialport
+QT       += core gui svg multimedia multimediawidgets serialport webenginewidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,6 +19,7 @@ SOURCES += \
     LayoutSquare.cpp \
     Pfd.cpp \
     WidgetPFD.cpp \
+    bridgetojs.cpp \
     joystickthread.cpp \
     main.cpp \
     mainwidget.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     LayoutSquare.hpp \
     Pfd.hpp \
     WidgetPFD.hpp \
+    bridgetojs.h \
     gcsmavlink/checksum.h \
     gcsmavlink/gcsmavlink/gcsmavlink.h \
     gcsmavlink/gcsmavlink/mavlink.h \
@@ -63,4 +65,8 @@ RESOURCES += \
     rcs.qrc
 
 LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswresample -lswscale -lz
+
+DISTFILES += \
+    baidumap.html \
+    qwebchannel.js
 

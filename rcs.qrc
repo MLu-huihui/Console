@@ -9,5 +9,10 @@
         <file>resource/qifei.png</file>
         <file>resource/wurenji.png</file>
         <file>resource/robot.jpg</file>
+        <file>resource/add-select.png</file>
+        <file>resource/a-dingwei2.png</file>
+        <file>resource/dingwei.png</file>
+        <file>resource/sami-select.png</file>
+        <file>resource/seleted.png</file>
     </qresource>
 </RCC>

@@ -51,7 +51,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>视频储存地址：</string>
+      <string>视频源地址：</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="videoLocation">
@@ -62,6 +62,9 @@
        <width>391</width>
        <height>25</height>
       </rect>
+     </property>
+     <property name="text">
+      <string>rtsp://192.168.144.25:8554/main.264</string>
      </property>
     </widget>
     <widget class="QLabel" name="flyLabel">
@@ -74,7 +77,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>飞行数据存储地址：</string>
+      <string>航点数据存储地址：</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="flyDataLocation">
@@ -85,6 +88,9 @@
        <width>391</width>
        <height>25</height>
       </rect>
+     </property>
+     <property name="text">
+      <string>/home/huihui/temporary/console/console/airpointInfo</string>
      </property>
     </widget>
    </widget>
@@ -103,6 +109,9 @@
      </property>
      <property name="text">
       <string>日本手</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QRadioButton" name="USMode">
@@ -184,6 +193,9 @@
        <height>16</height>
       </rect>
      </property>
+     <property name="value">
+      <number>49</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -196,6 +208,9 @@
        <width>321</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="value">
+      <number>49</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -210,6 +225,9 @@
        <height>16</height>
       </rect>
      </property>
+     <property name="value">
+      <number>49</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -222,6 +240,9 @@
        <width>321</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="value">
+      <number>49</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
