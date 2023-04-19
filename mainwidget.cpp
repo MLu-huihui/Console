@@ -41,7 +41,7 @@ MainWidget::MainWidget(QWidget *parent)
     ui->flyModeFunBox->hide();
     ui->flyMapFunBox->hide();
     ui->airPoindFunBox->hide();
-    ui->jsTestBox->hide();
+    //ui->jsTestBox->hide();
     //地图实现以及与JS交互实现
     map = new QWebEngineView(this);
     channel = new QWebChannel(this);
@@ -153,17 +153,16 @@ void MainWidget::SetMainWidget()
     {
         qDebug()<<serialPort->portName()<<"打开失败";
 
+    }    
+    else{
+        serialPort->setBaudRate(QSerialPort::Baud115200,QSerialPort::AllDirections);//设置波特率和读写方向
+        serialPort->setDataBits(QSerialPort::Data8);		//数据位为8位
+        serialPort->setFlowControl(QSerialPort::NoFlowControl);//无流控制
+        serialPort->setParity(QSerialPort::NoParity);	//无校验位
+        serialPort->setStopBits(QSerialPort::OneStop); //一位停止位
 
-        //临时用于地图开发
         map->lower();
         map->show();
-    }    
-//    else{
-//        serialPort->setBaudRate(QSerialPort::Baud115200,QSerialPort::AllDirections);//设置波特率和读写方向
-//        serialPort->setDataBits(QSerialPort::Data8);		//数据位为8位
-//        serialPort->setFlowControl(QSerialPort::NoFlowControl);//无流控制
-//        serialPort->setParity(QSerialPort::NoParity);	//无校验位
-//        serialPort->setStopBits(QSerialPort::OneStop); //一位停止位
 
         QPixmap pix;
         //绘制地面模式仪表盘并且隐藏
@@ -319,10 +318,10 @@ void MainWidget::SetMainWidget()
         connect(postureJOb, &PostureInfoDecode::GetPostureInfo, this, &MainWidget::PanelUpdate, Qt::QueuedConnection);
         qDebug()<<"准备接收并解析posture";
         emit StartPoseture();
-        //postureThread->start();
+        postureThread->start();
         qDebug() << "开始接受并解析posture";
 
-//    }
+    }
 }
 
 void MainWidget::PlayVideo(QImage image)
